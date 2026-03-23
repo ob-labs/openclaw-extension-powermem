@@ -67,4 +67,25 @@ describe("buildPowermemCliProcessEnv", () => {
     expect(env.LLM_MODEL).toBe("qwen-plus");
     expect(env.EMBEDDING_PROVIDER).toBe("qwen");
   });
+
+  it("maps bailian to qwen embedding (text-embedding-v4) and native DashScope base URL", async () => {
+    const env = await buildPowermemCliProcessEnv({
+      openclawConfig: {
+        agents: { defaults: { model: "bailian/qwen-plus" } },
+        models: {
+          providers: {
+            bailian: {
+              baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+              apiKey: "bk",
+            },
+          },
+        },
+      },
+      stateDir: "/tmp/memory-powermem-test-state",
+      resolveProviderAuth: async () => ({}),
+    });
+    expect(env.LLM_PROVIDER).toBe("qwen");
+    expect(env.EMBEDDING_MODEL).toBe("text-embedding-v4");
+    expect(env.DASHSCOPE_BASE_URL).toBe("https://dashscope.aliyuncs.com/api/v1");
+  });
 });

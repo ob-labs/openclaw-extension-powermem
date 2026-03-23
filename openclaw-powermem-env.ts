@@ -59,11 +59,24 @@ function secretToString(v: unknown): string | undefined {
   return undefined;
 }
 
+/**
+ * DashScope native HTTP API base (Generation / TextEmbedding SDK).
+ * OpenClaw "bailian" often uses OpenAI-compatible `/compatible-mode/v1`, which must not be used for PowerMem's qwen embedder.
+ */
+function dashscopeNativeBaseUrl(openclawBaseUrl: string | undefined): string | undefined {
+  if (!openclawBaseUrl?.trim()) return undefined;
+  const u = openclawBaseUrl.trim().replace(/\/+$/, "");
+  if (u.includes("/compatible-mode/")) {
+    return u.replace(/\/compatible-mode\/v1$/i, "/api/v1");
+  }
+  return u;
+}
+
 /** Map OpenClaw catalog provider id → PowerMem LLM provider name where they differ. */
 function normalizePowermemProvider(openclawProvider: string): string {
   const p = openclawProvider.toLowerCase();
   if (p === "google" || p === "google-generative-ai") return "gemini";
-  if (p === "dashscope") return "qwen";
+  if (p === "dashscope" || p === "bailian") return "qwen";
   return p;
 }
 
@@ -195,6 +208,10 @@ export async function buildPowermemCliProcessEnv(
       if (apiKey) out.EMBEDDING_API_KEY = apiKey;
       out.EMBEDDING_MODEL = "text-embedding-v4";
       out.EMBEDDING_DIMS = "1536";
+      {
+        const native = dashscopeNativeBaseUrl(baseUrl);
+        if (native) out.DASHSCOPE_BASE_URL = native;
+      }
       break;
     }
     case "ollama": {

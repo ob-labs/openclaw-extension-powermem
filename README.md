@@ -26,9 +26,9 @@ Follow the steps in order: install PowerMem, then install the plugin, configure 
 
 ## Step 1: Install and start PowerMem
 
-Choose **Option C (CLI, recommended for OpenClaw)** or **Option A (HTTP / pip)** or **Option B (Docker)**.
+Choose **Option A (CLI, recommended for OpenClaw individuals)**, **Option B (HTTP + pip)**, or **Option C (Docker)**.
 
-### Option C: CLI + SQLite (recommended for individuals)
+### Option A: CLI + SQLite (recommended for individuals)
 
 No HTTP server. Matches the plugin’s **default** (`mode: cli`).
 
@@ -42,19 +42,15 @@ No HTTP server. Matches the plugin’s **default** (`mode: cli`).
 
 2. **Config** — Use [INSTALL.md](INSTALL.md) one-liner `install.sh` to create `~/.openclaw/powermem/powermem.env` (SQLite template), or copy from PowerMem’s `.env.example`. Set `LLM_*` and `EMBEDDING_*`.
 
-3. **Plugin / OpenClaw** — After installing the plugin, either leave the default config (CLI + default `envFile` under `~/.openclaw/powermem/`) or set `envFile` / `pmemPath` explicitly if `pmem` is only inside the venv.
+3. If `pmem` exists only inside the venv, set `pmemPath` in the plugin `config` to the absolute path of `pmem` in that venv.
 
 4. **Verify** — With venv activated: `pmem --version`. After gateway start: `openclaw ltm health`.
 
 ---
 
-### Option A: HTTP server with pip
+### Option B: Install with pip (run HTTP server locally)
 
-Choose this for a **standalone API** or when not using CLI mode.
-
-### Option A: Install with pip (run server locally)
-
-Best if you already have Python 3.11+.
+Use this when you want a **standalone API** or are not using CLI mode. Best if you already have Python 3.11+ on the machine.
 
 **1. Install PowerMem**
 
@@ -97,7 +93,7 @@ EMBEDDING_DIMS=1536
 EOF
 ```
 
-Replace `your_api_key_here` with your Qwen API key and `your_password` with your OceanBase password. For SQLite (simplest local setup). For OpenAI or others, see PowerMem’s [.env.example](https://github.com/oceanbase/powermem/blob/master/.env.example) for `LLM_*` and `EMBEDDING_*`.
+Replace `your_api_key_here` with your Tongyi Qwen API key (and set `your_password` and other DB fields as needed for OceanBase). For OpenAI or other providers, see PowerMem’s [.env.example](https://github.com/oceanbase/powermem/blob/master/.env.example) for `LLM_*` and `EMBEDDING_*`.
 
 **3. Start the HTTP server**
 
@@ -122,7 +118,7 @@ If you get JSON (e.g. with `"status":"healthy"`), PowerMem is ready.
 
 ---
 
-### Option B: Run with Docker (no Python needed)
+### Option C: Run with Docker (no Python needed)
 
 Best if you have Docker and prefer not to install Python.
 
@@ -139,7 +135,7 @@ Edit `.env` and set at least:
 - `LLM_API_KEY`, `LLM_PROVIDER`, `LLM_MODEL`
 - `EMBEDDING_API_KEY`, `EMBEDDING_PROVIDER`, `EMBEDDING_MODEL`
 
-Database can stay default; OceanBase is recommended (see .env.example).
+Database: OceanBase is recommended.
 
 **2. Start the container**
 
@@ -163,7 +159,7 @@ JSON response means the server is up. API docs: `http://localhost:8000/docs`.
 
 - **One-click (Linux/macOS):** See [INSTALL.md](INSTALL.md) for `install.sh` (curl or run from repo root).
 - **Let OpenClaw install it (simplest):** Copy [skills/powermem-memory-quickstart/SKILL.md](skills/powermem-memory-quickstart/SKILL.md) to `~/.openclaw/skills/powermem-memory-quickstart/`, then say **「PowerMem 快速安装」** or **“PowerMem quickstart”**.  
-- **Full skill (options + troubleshooting):** [skills/install-powermem-memory/SKILL.md](skills/install-powermem-memory/SKILL.md) → **「安装 PowerMem 记忆」** / **“Install PowerMem memory”**.
+- **Full documentation (troubleshooting and advanced topics):** [skills/install-powermem-memory/SKILL.md](skills/install-powermem-memory/SKILL.md) → **「安装 PowerMem 记忆」** / **“Install PowerMem memory”**.
 - **Manual:** Steps below.
 
 ---
@@ -173,7 +169,7 @@ JSON response means the server is up. API docs: `http://localhost:8000/docs`.
 On your machine (use your actual plugin path):
 
 ```bash
-# Install from npm (recommended for end users; OpenClaw downloads the package from the npm registry)
+# Install from npm (recommended for end users; downloads and installs from the official npm registry)
 openclaw plugins install memory-powermem
 
 # Install from a local directory (e.g. cloned repo)
@@ -230,8 +226,8 @@ If you use **CLI mode** with the default paths and `pmem` on PATH, you can skip 
 
 Notes:
 
-- **CLI (default):** `mode` optional if omitted and `baseUrl` empty; use `envFile` + `pmemPath`. `pmem` must be runnable with your PowerMem `.env`.
-- **HTTP:** `baseUrl` required when `mode` is `http` (or omit `mode` and set `baseUrl` only — inferred as HTTP). No `/api/v1` suffix. Optional `apiKey` if the server uses auth.
+- **CLI (default):** You may omit `mode` and use CLI when `baseUrl` is empty; use `envFile` + `pmemPath`.
+- **HTTP:** When `mode` is `http`, `baseUrl` is required; if you set `baseUrl` without `mode`, the plugin treats it as HTTP. Do **not** append `/api/v1` to `baseUrl`. If the server uses API key auth, add `"apiKey"`.
 - **Restart the OpenClaw gateway** (or Mac menubar app) after changing config.
 
 ---
@@ -241,7 +237,7 @@ Notes:
 In a terminal:
 
 ```bash
-# Check PowerMem (CLI: pmem subprocess; HTTP: server)
+# Check whether PowerMem is reachable
 openclaw ltm health
 ```
 
@@ -257,7 +253,7 @@ openclaw ltm add "I prefer a cup of Americano every morning"
 openclaw ltm search "coffee"
 ```
 
-If search returns the line you added (or similar), the full flow (PowerMem → plugin → OpenClaw) is working.
+If search returns what you just added (or similar content), the full flow (install PowerMem → install plugin → configure OpenClaw) is working end to end.
 
 ---
 
@@ -294,7 +290,7 @@ After installing, uninstalling, or changing config, restart the OpenClaw gateway
 | `autoRecall`  | No       | Auto-inject relevant memories before agent starts; default `true`. |
 | `inferOnAdd`  | No       | Use PowerMem intelligent extraction when adding; default `true`. |
 
-**Auto-capture:** When a conversation ends, user/assistant text is sent to PowerMem with `infer: true`. PowerMem extracts and stores memories. At most 3 chunks per session (each up to 6000 chars).
+**Auto-capture:** When a session ends, this round’s user/assistant text is sent to PowerMem (`infer: true`) for extraction and storage. At most 3 items per round, each up to about 6000 characters.
 
 ---
 
@@ -303,7 +299,7 @@ After installing, uninstalling, or changing config, restart the OpenClaw gateway
 Exposed to OpenClaw agents:
 
 - **memory_recall** — Search long-term memories by query.
-- **memory_store** — Save information (with optional infer).
+- **memory_store** — Store one memory (optional intelligent extraction on write).
 - **memory_forget** — Delete by memory ID or by search query.
 
 ---
@@ -311,7 +307,7 @@ Exposed to OpenClaw agents:
 ## OpenClaw CLI (when plugin enabled)
 
 - `openclaw ltm search <query> [--limit n]` — Search memories.
-- `openclaw ltm health` — Check PowerMem server health.
+- `openclaw ltm health` — Check PowerMem service health.
 - `openclaw ltm add "<text>"` — Manually store one memory.
 
 ---
@@ -321,7 +317,7 @@ Exposed to OpenClaw agents:
 **1. `openclaw ltm health` fails or cannot connect**
 
 - **CLI:** `pmem` on PATH or correct `pmemPath`; valid `.env` at `envFile`.
-- **HTTP:** PowerMem server running; `baseUrl` matches (e.g. `http://localhost:8000`; avoid mixing `127.0.0.1` vs `localhost` unless intentional).
+- **HTTP:** PowerMem is running (HTTP server in a terminal, or Docker); `baseUrl` is correct (e.g. `http://localhost:8000`; watch for `127.0.0.1` vs `localhost` mismatches).
 - Remote server: use the host IP or hostname instead of `localhost`.
 
 **2. Add/search returns nothing or 500**
@@ -337,7 +333,7 @@ Exposed to OpenClaw agents:
 **4. Agent does not search memory until I ask it to**
 
 - With `autoRecall: true`, the plugin injects system guidance so the agent is told to use `memory_recall` (or injected `<relevant-memories>`) when answering about past events, preferences, or people. Ensure `autoRecall` is not set to `false`.
-- Auto-recall runs before each turn using the current user message (or the last user message if the prompt is very short). If you still see the agent answering without checking memory, try being explicit once (e.g. "check your memory for …") and ensure the run uses the plugin (e.g. web UI after `/new` uses the same gateway and plugin).
+- Auto-recall runs before each turn using the current user message (or the previous user message if the prompt is very short). If the agent still replies without querying memory, try saying explicitly once “check memory for …” to confirm the pipeline; ensure the Web session after `/new` uses the same gateway and plugin.
 
 **5. Agent tries to read `memory/YYYY-MM-DD.md` and gets ENOENT**
 

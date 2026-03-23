@@ -26,7 +26,7 @@
 
 ## 第一步：安装并启动 PowerMem
 
-可选 **方式 C（CLI，推荐给 OpenClaw 个人用户）**、**方式 A（HTTP + pip）** 或 **方式 B（Docker）**。
+可选 **方式 A（CLI，推荐给 OpenClaw 个人用户）**、**方式 B（HTTP + pip）** 或 **方式 C（Docker）**。
 
 ### 方式 C：CLI + SQLite（推荐给个人）
 
@@ -48,7 +48,7 @@
 
 ---
 
-### 方式 A：用 pip 安装（本机跑 HTTP 服务）
+### 方式 B：用 pip 安装（本机跑 HTTP 服务）
 
 适合要**单独起 API 服务**、或不使用 CLI 模式的场景。适合本机已有 Python 3.11+ 的情况。
 
@@ -119,7 +119,7 @@ curl -s http://localhost:8000/api/v1/system/health
 
 ---
 
-### 方式 B：用 Docker 运行（不装 Python 也行）
+### 方式 C：用 Docker 运行（不装 Python 也行）
 
 适合本机有 Docker、不想装 Python 的情况。
 
