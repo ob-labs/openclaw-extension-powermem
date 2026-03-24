@@ -1,156 +1,100 @@
 ---
 name: install-powermem-memory
-description: Step-by-step guide to install and configure the PowerMem long-term memory plugin (full path, options, troubleshooting). After setup, the plugin auto-captures conversation highlights and auto-recalls relevant memories. This skill is self-contained and can be published independently of any minimal-install skill.
+description: OpenClaw skill「快速安装」路径（skill id 与目录名均为 install-powermem-memory）：memory-powermem + PowerMem 最少步骤，面向个人用户；无需单独配置 powermem.env，复用 OpenClaw 里已配好的对话模型。可独立分发；完整选项、工具说明与排错见 install-powermem-memory-full。
 triggers:
-  - "安装 PowerMem 记忆"
-  - "安装 PowerMem 记忆插件"
-  - "Install PowerMem memory"
-  - "Install PowerMem memory plugin"
-  - "配置 PowerMem 记忆"
-  - "Configure PowerMem memory"
-  - "PowerMem 是什么"
-  - "什么是 PowerMem"
-  - "What is PowerMem"
+  - "PowerMem 快速安装"
+  - "PowerMem 最简单安装"
+  - "memory-powermem 最小安装"
+  - "怎么装 PowerMem 记忆"
+  - "OpenClaw 记忆 怎么装"
+  - "安装长期记忆"
+  - "Quick install PowerMem"
+  - "PowerMem quickstart"
+  - "Easiest PowerMem setup"
+  - "Minimal install memory-powermem"
+  - "Install powermem memory minimal"
 ---
 
-# PowerMem Memory Guide
+# PowerMem 记忆 · 快速安装（个人用户）
 
-This skill folder includes supplementary docs:
+本 skill 在 OpenClaw 中的标识与建议目录名为 **`install-powermem-memory`**。若需要 HTTP/多实例、工具表与详细排错，请改用 **`install-powermem-memory-full`**（仓库内 `skills/install-powermem-memory-full/`，需一并拷贝该目录下全部 `.md`）。
 
-- **powermem-intro.md** — What PowerMem is, features, vs file-based memory.
-- **config-reference.md** — Config keys, state dir, commands.
+你只要记住几件事：**OpenClaw 能正常聊天**、**Python 先确认 ≥ 3.10**、**本机装好 PowerMem**、**装上插件**。不用手写 `powermem.env`，记忆用的模型和 Key 会跟你在 OpenClaw 里配的一样。
 
-## How It Works
+---
 
-- **Auto-Capture**: After a conversation, the plugin sends valuable user/assistant text to PowerMem (optional infer / intelligent extraction).
-- **Auto-Recall**: Before each turn, it searches memories and can inject a `<relevant-memories>` block into context.
+## 你要做什么（按顺序）
 
-## When User Asks to Install
+1. **确认 OpenClaw 已经能用**  
+   终端执行 `openclaw --version`，并且你已经在 OpenClaw 里配好了**平时对话用的模型**（能正常回复即可）。
 
-**Recommended order (TO C):** (1) OpenClaw installed and **default model + provider auth** configured. (2) **Python 3.10+ verified** (`python3 --version`) *before* venv / `pip install`. (3) `pip install powermem` and `pmem` available to the gateway (PATH or `pmemPath`). (4) Install the **memory-powermem** plugin. **No `powermem.env` is required** for the default path.
-
-The curl **`install.sh`** deploys the plugin and OpenClaw entries; with **`-y`** it may still create **`~/.openclaw/powermem/powermem.env`** as an *optional* template—it does **not** run `pip install powermem`. That file is **not** required if the user relies on **OpenClaw-injected** LLM + default SQLite.
-
-1. **Check OpenClaw**  
-   `openclaw --version`. If missing: `npm install -g openclaw`, `openclaw onboard`.  
-   Ensure **`agents.defaults.model`** is set (e.g. `openai/gpt-4o-mini`) and the corresponding **provider / API key** works for normal chat—the plugin reuses that for PowerMem when **`useOpenClawModel`** is true (default).
-
-2. **Check Python (required before venv / pip)**  
-   PowerMem needs **Python 3.10 or newer**. Run **`python3 --version`** first; the minor version must be **≥ 10** (e.g. 3.10.x, 3.12.x). Optional strict check:
+2. **先检查 Python 版本（必须 ≥ 3.10）**  
+   在创建虚拟环境或执行 `pip install` **之前**必须先确认版本，否则后续容易装失败或运行异常：
    ```bash
-   python3 -c "import sys; assert sys.version_info >= (3, 10), 'Need Python 3.10+'; print(sys.version.split()[0], 'OK')"
+   python3 --version
    ```
-   If it fails: upgrade Python or use a specific binary (e.g. `python3.12`) for all commands below instead of `python3`.
-
-3. **Install PowerMem (CLI — default)**  
-   - Venv recommended: e.g. `python3 -m venv ~/.openclaw/powermem/.venv && source ~/.openclaw/powermem/.venv/bin/activate`.  
-   - `pip install powermem`.  
-   - **Defaults:** Plugin injects **SQLite** at `<OpenClaw stateDir>/powermem/data/powermem.db` and **LLM + embedding** env vars derived from OpenClaw. Typical `stateDir` is `~/.openclaw` unless the user uses another instance (`OPENCLAW_STATE_DIR`, `--workdir`).  
-   - **Optional `envFile`:** Path to a PowerMem `.env` for extra tuning. If the file **exists**, `pmem` loads it; **OpenClaw-derived vars still override** the same keys when `useOpenClawModel` is true.  
-   - **`useOpenClawModel: false`:** Disables injection; user must supply a **complete** PowerMem config via `.env` and/or environment variables.  
-   - **Verify:** `pmem --version`. If the gateway does not inherit the venv, set **`pmemPath`** to the absolute path of `pmem`.
-
-4. **HTTP path (enterprise / shared server)**  
-   - Same **Python 3.10+** requirement as CLI; then `pip install powermem`, `.env` in server working directory, `powermem-server --host 0.0.0.0 --port 8000`.  
-   - Check: `curl -s http://localhost:8000/api/v1/system/health`.
-
-5. **Install the plugin**  
-   `openclaw plugins install /path/to/memory-powermem`, or **`install.sh`** from [INSTALL.md](https://github.com/ob-labs/memory-powermem/blob/main/INSTALL.md).
-
-6. **Configure OpenClaw**  
-
-   **CLI — minimal (recommended, matches plugin defaults):**  
-   Do **not** set `envFile` unless you need a file. Example:
-
+   输出应为 **Python 3.10.x、3.11.x、3.12.x** 等（次版本号 ≥ 10）。也可用下面命令做一次硬性校验（不通过会报错退出）：
    ```bash
-   openclaw config set plugins.enabled true
-   openclaw config set plugins.slots.memory memory-powermem
-   openclaw config set plugins.entries.memory-powermem.config.mode cli
-   openclaw config set plugins.entries.memory-powermem.config.pmemPath pmem
-   openclaw config set plugins.entries.memory-powermem.config.useOpenClawModel true --json
-   openclaw config set plugins.entries.memory-powermem.config.autoCapture true --json
-   openclaw config set plugins.entries.memory-powermem.config.autoRecall true --json
-   openclaw config set plugins.entries.memory-powermem.config.inferOnAdd true --json
+   python3 -c "import sys; assert sys.version_info >= (3, 10), '需要 Python 3.10 或更高'; print(sys.version.split()[0], 'OK')"
    ```
+   若版本不够：先升级本机 Python，或安装并使用 `python3.11` / `python3.12` 等满足要求的解释器，并将下面步骤里的 **`python3`** 换成实际命令（例如 `python3.12 -m venv ...`）。
 
-   **CLI — optional `.env` override file:**
-
+3. **安装 PowerMem（Python）**  
+   建议用虚拟环境，然后安装：
    ```bash
-   openclaw config set plugins.entries.memory-powermem.config.envFile "$HOME/.openclaw/powermem/powermem.env"
+   python3 -m venv ~/.openclaw/powermem/.venv
+   source ~/.openclaw/powermem/.venv/bin/activate
+   pip install powermem
    ```
+   装好后执行 `pmem --version`，能输出版本就行。
 
-   (Only matters if that path exists; OpenClaw can still override LLM keys when `useOpenClawModel` is true.)
+4. **让网关能找到 `pmem`**  
+   如果你启动 `openclaw gateway` 的终端**没有**激活上面的 venv，有两种简单办法二选一：  
+   - 每次开网关前先 `source ~/.openclaw/powermem/.venv/bin/activate`；或  
+   - 在插件配置里把 **`pmemPath`** 写成 venv 里 `pmem` 的**完整路径**（装完后可用 `which pmem` 查看）。
 
-   **HTTP:**
-
+5. **一键装插件（推荐）**  
+   在 **Mac / Linux** 上执行（需已安装 OpenClaw）。脚本**不会**替你执行 `pip install powermem`；装插件前仍需完成上面的 PowerMem 与 `pmem` 步骤。
    ```bash
-   openclaw config set plugins.entries.memory-powermem.config.mode http
-   openclaw config set plugins.entries.memory-powermem.config.baseUrl http://localhost:8000
+   curl -fsSL https://raw.githubusercontent.com/ob-labs/memory-powermem/main/install.sh | bash -s -y
    ```
+   已克隆本仓库时，也可在仓库根目录执行：`bash install.sh`（可加 `-y`、或 `bash -s -- --workdir ~/.openclaw-second` 指定另一套 OpenClaw 数据目录）。  
+   脚本会把插件放进 OpenClaw，并打开「用 OpenClaw 的模型驱动记忆」等默认选项；带 `-y` 时仍可能生成可选模板 **`~/.openclaw/powermem/powermem.env`**（默认路径下通常不必手改）。
 
-   Optional: `apiKey` if the server uses auth.
-
-7. **Verify**  
-   Restart **gateway**, then in another terminal:
-
+6. **重启网关并检查**  
+   ```bash
+   openclaw gateway
+   ```
+   另开终端，**先**确认插件已被网关加载：
    ```bash
    openclaw plugins list
    ```
-
-   Confirm **memory-powermem** is listed and its status is **loaded**. If it is missing or not loaded, fix install/slot config and restart the gateway before running LTM checks.
-
+   输出里要有 **memory-powermem**，且其状态为 **loaded**（已加载）。若只有安装记录、状态不是 loaded，先按下面「若某一步失败」处理，**不要**跳过这步直接去测 `ltm`。  
+   通过后再检查记忆健康并试写读：
    ```bash
    openclaw ltm health
-   openclaw ltm add "I prefer coffee in the morning"
-   openclaw ltm search "coffee"
+   ```
+   显示健康后试一句：
+   ```bash
+   openclaw ltm add "我喜欢喝美式"
+   openclaw ltm search "咖啡"
    ```
 
-## Available Tools
+---
 
-| Tool | Description |
-|------|-------------|
-| **memory_recall** | Search long-term memories. Params: `query`, optional `limit`, `scoreThreshold`. |
-| **memory_store** | Save text; optional infer. Params: `text`, optional `importance`. |
-| **memory_forget** | Delete by `memoryId` or by `query` search. |
+## 若某一步失败
 
-## Configuration (summary)
+| 情况 | 怎么办 |
+|------|--------|
+| `python3 --version` 低于 3.10 | **先升级或换用** `python3.11` / `python3.12` 等，再重做「检查 Python」与 venv 步骤；不要跳过版本检查强行 `pip install`。 |
+| `pip install powermem` 报错 | 再次确认 Python ≥ 3.10；换干净 venv 再试。 |
+| `pmem` 找不到 | 激活 venv，或配置 **`pmemPath`** 为绝对路径。 |
+| `plugins list` 没有 **memory-powermem**，或状态不是 **loaded** | 确认已执行安装脚本或 `openclaw plugins install`；`plugins.enabled` 为 true、`plugins.slots.memory` 为 **memory-powermem**；改完后**重启 gateway**，再执行 `openclaw plugins list` 复查。 |
+| `ltm health` 不健康 | 确认 OpenClaw 里**默认模型**和 API Key 本身能聊天；升级 OpenClaw 到较新版本后再试。 |
+| 想要更多选项（多实例、HTTP、`install.sh` 细节、工具与排错表等） | 使用 **`install-powermem-memory-full`** skill（含 **config-reference.md**），或查阅 **[memory-powermem](https://github.com/ob-labs/memory-powermem)** 的 **README**。 |
 
-| Field | Default | Description |
-|-------|---------|-------------|
-| `mode` | `cli` | `cli` or `http`. |
-| `baseUrl` | — | Required for HTTP; if `mode` omitted and `baseUrl` set → HTTP. |
-| `apiKey` | — | HTTP server auth. |
-| `envFile` | — | Optional CLI `.env` (used only if file exists). |
-| `pmemPath` | `pmem` | CLI binary path. |
-| `useOpenClawModel` | `true` | Inject LLM/embedding from OpenClaw + default SQLite under state dir. |
-| `recallLimit` | `5` | Max memories per recall. |
-| `recallScoreThreshold` | `0` | Min score 0–1. |
-| `autoCapture` / `autoRecall` / `inferOnAdd` | `true` | Auto memory pipeline and infer on add. |
+---
 
-## Daily Operations
+## 说明（一句话）
 
-```bash
-openclaw gateway
-
-openclaw ltm health
-openclaw ltm add "Some fact to remember"
-openclaw ltm search "query"
-
-openclaw config set plugins.slots.memory none
-openclaw config set plugins.slots.memory memory-powermem
-```
-
-Restart the gateway after slot or plugin config changes.
-
-## Troubleshooting
-
-| Symptom | Fix |
-|---------|-----|
-| **Python < 3.10** | Run step 2 first; upgrade Python or use `python3.11` / `python3.12` for venv and `pip install`. Do not skip the version check. |
-| **`pip install powermem` fails** | Confirm Python 3.10+, clean venv. See [PowerMem issues](https://github.com/oceanbase/powermem/issues). |
-| **`pmem` not found** | Activate venv or set **`pmemPath`** to the full binary. |
-| **`openclaw ltm health` unhealthy (CLI)** | Confirm **`agents.defaults.model`** and provider keys in OpenClaw; gateway version should expose plugin **`config`** + **`runtime.modelAuth`**. Or set **`useOpenClawModel: false`** and a full **`envFile`**. |
-| **Health OK but add/search errors** | Embedding/LLM mismatch for your provider—see gateway logs; try optional **PowerMem `.env`** from [.env.example](https://github.com/oceanbase/powermem/blob/master/.env.example). |
-| **Wrong SQLite file / instance** | Data is under **that OpenClaw instance’s `stateDir`** (`OPENCLAW_STATE_DIR` / `--workdir`). |
-| **HTTP mode** | Server running, **`baseUrl`** correct, **`apiKey`** if enabled. |
-| **`openclaw plugins list`**: no `memory-powermem`, or status is not **loaded** | Re-run plugin install; set `plugins.enabled` true and `plugins.slots.memory` = `memory-powermem`; restart **gateway**; run `openclaw plugins list` again until **memory-powermem** shows **loaded**. |
+记忆数据默认存在本机 OpenClaw 数据目录下的 SQLite 里；**不需要**你再单独维护一份 PowerMem 的 `.env`，除非你熟悉进阶配置。

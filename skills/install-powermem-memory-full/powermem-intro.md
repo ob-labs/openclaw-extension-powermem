@@ -1,6 +1,6 @@
 # PowerMem Introduction
 
-Use this doc when the user asks "what is PowerMem", "why use PowerMem", or needs a product overview.
+Ships with OpenClaw skill **`install-powermem-memory-full`** (folder `install-powermem-memory-full`). Use this doc when the user asks "what is PowerMem", "why use PowerMem", or needs a product overview.
 
 ---
 

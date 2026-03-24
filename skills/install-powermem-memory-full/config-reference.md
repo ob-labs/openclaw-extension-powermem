@@ -1,6 +1,6 @@
 # Config & Commands Quick Reference
 
-Quick reference for this skill folder. See **SKILL.md** for the full install flow.
+Quick reference for skill **`install-powermem-memory-full`**. See **SKILL.md** in this folder for the full install flow.
 
 ---
 
@@ -8,7 +8,7 @@ Quick reference for this skill folder. See **SKILL.md** for the full install flo
 
 - **Python 3.10+** — `python3 --version`.
 - **Install** — `pip install powermem` (virtualenv recommended).
-- **CLI (default)** — No `powermem.env` required for a minimal setup: the plugin injects **SQLite** (under the OpenClaw **state directory**) and **LLM + embedding** from OpenClaw (`agents.defaults.model` + provider keys), as long as `useOpenClawModel` is `true` (default).
+- **CLI (default)** — No `powermem.env` required for the default setup: the plugin injects **SQLite** (under the OpenClaw **state directory**) and **LLM + embedding** from OpenClaw (`agents.defaults.model` + provider keys), as long as `useOpenClawModel` is `true` (default).
 - **`pmem` on PATH** — When you start `openclaw gateway`, the same environment should expose `pmem`, or set plugin `pmemPath` to the binary’s absolute path (e.g. inside a venv).
 - **Optional `.env`** — Set `envFile` to a PowerMem `.env` if you want file-based overrides; if the file exists, it is loaded first, then OpenClaw-derived variables **override** the same keys (when `useOpenClawModel` is true).
 - **HTTP (shared server)** — Run `powermem-server` with its own `.env`; plugin `mode: http` + `baseUrl`. Verify with `curl` on `/api/v1/system/health`.
@@ -67,3 +67,49 @@ openclaw config set plugins.slots.memory memory-powermem
 ```
 
 Restart the gateway after changing plugin or memory-slot config.
+
+---
+
+## Example `openclaw.json` fragments (manual edit)
+
+Prefer `openclaw config set` when possible; use these when editing **`~/.openclaw/openclaw.json`** (or your instance’s config) directly. Replace paths with the user’s home / real `pmem` binary path.
+
+**CLI mode (explicit `envFile`; optional when using OpenClaw-injected LLM + defaults):**
+
+```json
+{
+  "plugins": {
+    "enabled": true,
+    "slots": { "memory": "memory-powermem" },
+    "entries": {
+      "memory-powermem": {
+        "enabled": true,
+        "config": {
+          "mode": "cli",
+          "envFile": "/home/you/.openclaw/powermem/powermem.env",
+          "pmemPath": "pmem",
+          "autoCapture": true,
+          "autoRecall": true,
+          "inferOnAdd": true
+        }
+      }
+    }
+  }
+}
+```
+
+If `pmem` lives only inside a venv, set **`pmemPath`** to that binary’s absolute path. With **`useOpenClawModel: true`** and no need for a file, you can omit **`envFile`** (see **SKILL.md** for the recommended `openclaw config set` flow).
+
+**HTTP mode (shared server):**
+
+```json
+"config": {
+  "mode": "http",
+  "baseUrl": "http://localhost:8000",
+  "autoCapture": true,
+  "autoRecall": true,
+  "inferOnAdd": true
+}
+```
+
+If you omit **`mode`** but set a non-empty **`baseUrl`**, the plugin treats the backend as **http** (backward compatible). Add **`apiKey`** when the server requires it.

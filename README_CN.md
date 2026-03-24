@@ -40,7 +40,7 @@
    pip install powermem
    ```
 
-2. 配置：用 [INSTALL.md](INSTALL.md) 里的一键 `install.sh` 生成 `~/.openclaw/powermem/powermem.env`（SQLite 模板），或复制 PowerMem 官方 `.env.example`，填写 `LLM_*`、`EMBEDDING_*`。
+2. 配置：克隆本仓库后在根目录执行 `bash install.sh`（或使用下方「安装方式」里的 curl 一键命令）可生成可选的 `~/.openclaw/powermem/powermem.env` 模板；也可复制 PowerMem 官方 `.env.example` 并填写 `LLM_*`、`EMBEDDING_*`（不依赖 OpenClaw 注入模型时需要）。
 
 3. 若 `pmem` 只在 venv 里，在插件 `config` 里把 `pmemPath` 设为该 venv 下 `pmem` 的绝对路径。
 
@@ -158,9 +158,13 @@ curl -s http://localhost:8000/api/v1/system/health
 
 ## 安装方式
 
-- **一键安装（Linux/macOS）：** 见 [INSTALL.md](INSTALL.md)，使用 `install.sh`（curl 或从仓库根目录执行）。
-- **OpenClaw skill（最小安装）：** 将 [skills/install-powermem-memory-minimal/SKILL.md](skills/install-powermem-memory-minimal/SKILL.md) 复制到 `~/.openclaw/skills/install-powermem-memory-minimal/`，然后说「**PowerMem 快速安装**」或「**memory-powermem 最小安装**」或 **“Install powermem memory minimal”**。  
-- **OpenClaw skill（完整指南）：** 将 [skills/install-powermem-memory/SKILL.md](skills/install-powermem-memory/SKILL.md)（若从仓库拷贝，建议连同该目录下其余 `.md` 一并放入 skill 目录）复制到 `~/.openclaw/skills/install-powermem-memory/`，然后说「**安装 PowerMem 记忆**」。最小安装与完整指南两个 skill **彼此独立**，按需选用其一即可。
+- **一键安装（Linux/macOS）：**  
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/ob-labs/memory-powermem/main/install.sh | bash
+  ```  
+  已克隆仓库：`cd /path/to/memory-powermem && bash install.sh`。非交互：同一 curl 命令改为接到 `bash -s -y`。指定另一数据目录：`bash -s -- --workdir ~/.openclaw-second`。更完整的说明与排错见 OpenClaw skill **`install-powermem-memory-full`**（[skills/install-powermem-memory-full/](skills/install-powermem-memory-full/)）。
+- **OpenClaw skill — 快速安装（`install-powermem-memory`）：** 将 [skills/install-powermem-memory/SKILL.md](skills/install-powermem-memory/SKILL.md) 复制到 `~/.openclaw/skills/install-powermem-memory/`，然后说「**PowerMem 快速安装**」或「**memory-powermem 最小安装**」或 **“Install powermem memory minimal”**。  
+- **OpenClaw skill — 完整指南（`install-powermem-memory-full`）：** 将 [skills/install-powermem-memory-full/SKILL.md](skills/install-powermem-memory-full/SKILL.md)（若从仓库拷贝，建议连同该目录下其余 `.md` 一并放入 skill 目录）复制到 `~/.openclaw/skills/install-powermem-memory-full/`，然后说「**安装 PowerMem 记忆**」。快速安装与完整指南两个 skill **彼此独立**，按需选用其一即可。
 - **手动安装：** 按下面步骤操作。
 
 ---

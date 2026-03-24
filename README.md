@@ -40,7 +40,7 @@ No HTTP server. Matches the plugin’s **default** (`mode: cli`).
    pip install powermem
    ```
 
-2. **Config** — Use [INSTALL.md](INSTALL.md) one-liner `install.sh` to create `~/.openclaw/powermem/powermem.env` (SQLite template), or copy from PowerMem’s `.env.example`. Set `LLM_*` and `EMBEDDING_*`.
+2. **Config** — From a clone of this repo, run `bash install.sh` (or the curl one-liner under **Install options** below) to create an optional `~/.openclaw/powermem/powermem.env` template, or copy from PowerMem’s `.env.example`. Set `LLM_*` and `EMBEDDING_*` when not relying on OpenClaw-injected models.
 
 3. If `pmem` exists only inside the venv, set `pmemPath` in the plugin `config` to the absolute path of `pmem` in that venv.
 
@@ -157,9 +157,13 @@ JSON response means the server is up. API docs: `http://localhost:8000/docs`.
 
 ## Install options
 
-- **One-click (Linux/macOS):** See [INSTALL.md](INSTALL.md) for `install.sh` (curl or run from repo root).
-- **OpenClaw skill (minimal install):** Copy [skills/install-powermem-memory-minimal/SKILL.md](skills/install-powermem-memory-minimal/SKILL.md) to `~/.openclaw/skills/install-powermem-memory-minimal/`, then say **「PowerMem 快速安装」** / **“PowerMem quickstart”** or **“Minimal install memory-powermem”** / **“Install powermem memory minimal”**.  
-- **OpenClaw skill (full guide):** Copy [skills/install-powermem-memory/SKILL.md](skills/install-powermem-memory/SKILL.md) (and its sibling `.md` files in that folder if you mirror the repo) to `~/.openclaw/skills/install-powermem-memory/`, then say **「安装 PowerMem 记忆」** / **“Install PowerMem memory”**. The minimal and full skills are **independent**; use whichever fits your workflow.
+- **One-click (Linux/macOS):**  
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/ob-labs/memory-powermem/main/install.sh | bash
+  ```  
+  From a clone: `cd /path/to/memory-powermem && bash install.sh`. Non-interactive: same URL but pipe to `bash -s -y`. Another OpenClaw instance: `bash -s -- --workdir ~/.openclaw-second`. Details and troubleshooting: OpenClaw skill **`install-powermem-memory-full`** ([skills/install-powermem-memory-full/](skills/install-powermem-memory-full/)).
+- **OpenClaw skill — quickstart (`install-powermem-memory`):** Copy [skills/install-powermem-memory/SKILL.md](skills/install-powermem-memory/SKILL.md) to `~/.openclaw/skills/install-powermem-memory/`, then say **「PowerMem 快速安装」** / **“PowerMem quickstart”** or **“Minimal install memory-powermem”** / **“Install powermem memory minimal”**.  
+- **OpenClaw skill — full guide (`install-powermem-memory-full`):** Copy [skills/install-powermem-memory-full/SKILL.md](skills/install-powermem-memory-full/SKILL.md) (and its sibling `.md` files in that folder if you mirror the repo) to `~/.openclaw/skills/install-powermem-memory-full/`, then say **「安装 PowerMem 记忆」** / **“Install PowerMem memory”**. The quickstart and full-guide skills are **independent**; use whichever fits your workflow.
 - **Manual:** Steps below.
 
 ---
