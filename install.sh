@@ -83,7 +83,7 @@ case "$(uname -s)" in
   *)        OS="unknown";;
 esac
 if [[ "$OS" == "windows" ]]; then
-  err "Windows is not supported by this script. Use README.md or skills/install-powermem-memory-full for manual steps."
+  err "Windows is not supported by this script. Use README.md or skills/install-memory-powermem-full for manual steps."
   exit 1
 fi
 

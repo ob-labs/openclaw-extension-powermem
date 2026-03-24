@@ -162,9 +162,9 @@ curl -s http://localhost:8000/api/v1/system/health
   ```bash
   curl -fsSL https://raw.githubusercontent.com/ob-labs/memory-powermem/main/install.sh | bash
   ```  
-  已克隆仓库：`cd /path/to/memory-powermem && bash install.sh`。非交互：同一 curl 命令改为接到 `bash -s -y`。指定另一数据目录：`bash -s -- --workdir ~/.openclaw-second`。更完整的说明与排错见 OpenClaw skill **`install-powermem-memory-full`**（[skills/install-powermem-memory-full/](skills/install-powermem-memory-full/)）。
-- **OpenClaw skill — 快速安装（`install-powermem-memory`）：** 将 [skills/install-powermem-memory/SKILL.md](skills/install-powermem-memory/SKILL.md) 复制到 `~/.openclaw/skills/install-powermem-memory/`，然后说「**PowerMem 快速安装**」或「**memory-powermem 最小安装**」或 **“Install powermem memory minimal”**。  
-- **OpenClaw skill — 完整指南（`install-powermem-memory-full`）：** 将 [skills/install-powermem-memory-full/SKILL.md](skills/install-powermem-memory-full/SKILL.md)（若从仓库拷贝，建议连同该目录下其余 `.md` 一并放入 skill 目录）复制到 `~/.openclaw/skills/install-powermem-memory-full/`，然后说「**安装 PowerMem 记忆**」。快速安装与完整指南两个 skill **彼此独立**，按需选用其一即可。
+  已克隆仓库：`cd /path/to/memory-powermem && bash install.sh`。非交互：同一 curl 命令改为接到 `bash -s -y`。指定另一数据目录：`bash -s -- --workdir ~/.openclaw-second`。更完整的说明与排错见 OpenClaw skill **`install-memory-powermem-full`**（[skills/install-memory-powermem-full/](skills/install-memory-powermem-full/)）。
+- **OpenClaw skill — 快速安装（`install-memory-powermem`）：** 将 [skills/install-memory-powermem/SKILL.md](skills/install-memory-powermem/SKILL.md) 复制到 `~/.openclaw/skills/install-memory-powermem/`，然后说「**PowerMem 快速安装**」或「**memory-powermem 最小安装**」或 **“Install memory powermem minimal”**。  
+- **OpenClaw skill — 完整指南（`install-memory-powermem-full`）：** 将 [skills/install-memory-powermem-full/SKILL.md](skills/install-memory-powermem-full/SKILL.md)（若从仓库拷贝，建议连同该目录下其余 `.md` 一并放入 skill 目录）复制到 `~/.openclaw/skills/install-memory-powermem-full/`，然后说「**安装 PowerMem 记忆**」。快速安装与完整指南两个 skill **彼此独立**，按需选用其一即可。
 - **手动安装：** 按下面步骤操作。
 
 ---

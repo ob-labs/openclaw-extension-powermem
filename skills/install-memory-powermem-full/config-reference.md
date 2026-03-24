@@ -1,6 +1,6 @@
 # Config & Commands Quick Reference
 
-Quick reference for skill **`install-powermem-memory-full`**. See **SKILL.md** in this folder for the full install flow.
+Quick reference for skill **`install-memory-powermem-full`**. See **SKILL.md** in this folder for the full install flow.
 
 ---
 

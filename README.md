@@ -161,9 +161,9 @@ JSON response means the server is up. API docs: `http://localhost:8000/docs`.
   ```bash
   curl -fsSL https://raw.githubusercontent.com/ob-labs/memory-powermem/main/install.sh | bash
   ```  
-  From a clone: `cd /path/to/memory-powermem && bash install.sh`. Non-interactive: same URL but pipe to `bash -s -y`. Another OpenClaw instance: `bash -s -- --workdir ~/.openclaw-second`. Details and troubleshooting: OpenClaw skill **`install-powermem-memory-full`** ([skills/install-powermem-memory-full/](skills/install-powermem-memory-full/)).
-- **OpenClaw skill — quickstart (`install-powermem-memory`):** Copy [skills/install-powermem-memory/SKILL.md](skills/install-powermem-memory/SKILL.md) to `~/.openclaw/skills/install-powermem-memory/`, then say **「PowerMem 快速安装」** / **“PowerMem quickstart”** or **“Minimal install memory-powermem”** / **“Install powermem memory minimal”**.  
-- **OpenClaw skill — full guide (`install-powermem-memory-full`):** Copy [skills/install-powermem-memory-full/SKILL.md](skills/install-powermem-memory-full/SKILL.md) (and its sibling `.md` files in that folder if you mirror the repo) to `~/.openclaw/skills/install-powermem-memory-full/`, then say **「安装 PowerMem 记忆」** / **“Install PowerMem memory”**. The quickstart and full-guide skills are **independent**; use whichever fits your workflow.
+  From a clone: `cd /path/to/memory-powermem && bash install.sh`. Non-interactive: same URL but pipe to `bash -s -y`. Another OpenClaw instance: `bash -s -- --workdir ~/.openclaw-second`. Details and troubleshooting: OpenClaw skill **`install-memory-powermem-full`** ([skills/install-memory-powermem-full/](skills/install-memory-powermem-full/)).
+- **OpenClaw skill — quickstart (`install-memory-powermem`):** Copy [skills/install-memory-powermem/SKILL.md](skills/install-memory-powermem/SKILL.md) to `~/.openclaw/skills/install-memory-powermem/`, then say **「PowerMem 快速安装」** / **“PowerMem quickstart”** or **“Minimal install memory-powermem”** / **“Install memory powermem minimal”**.  
+- **OpenClaw skill — full guide (`install-memory-powermem-full`):** Copy [skills/install-memory-powermem-full/SKILL.md](skills/install-memory-powermem-full/SKILL.md) (and its sibling `.md` files in that folder if you mirror the repo) to `~/.openclaw/skills/install-memory-powermem-full/`, then say **「安装 PowerMem 记忆」** / **“Install PowerMem memory”**. The quickstart and full-guide skills are **independent**; use whichever fits your workflow.
 - **Manual:** Steps below.
 
 ---

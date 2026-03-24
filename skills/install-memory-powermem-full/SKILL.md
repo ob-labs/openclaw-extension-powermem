@@ -1,6 +1,6 @@
 ---
-name: install-powermem-memory-full
-description: OpenClaw full guide skill (id and folder name install-powermem-memory-full). Step-by-step install and configuration for the PowerMem long-term memory plugin—options, tools, troubleshooting—and bundled reference docs. Complements the quickstart skill install-powermem-memory; either can be used alone.
+name: install-memory-powermem-full
+description: OpenClaw full guide skill (id and folder name install-memory-powermem-full). Step-by-step install and configuration for the PowerMem long-term memory plugin—options, tools, troubleshooting—and bundled reference docs. Complements the quickstart skill install-memory-powermem; either can be used alone.
 triggers:
   - "安装 PowerMem 记忆"
   - "安装 PowerMem 记忆插件"
@@ -15,7 +15,7 @@ triggers:
 
 # PowerMem Memory — Full Guide
 
-**Skill id / OpenClaw folder name:** `install-powermem-memory-full`. For the shortest install-only path, use **`install-powermem-memory`** (quickstart).
+**Skill id / OpenClaw folder name:** `install-memory-powermem-full`. For the shortest install-only path, use **`install-memory-powermem`** (quickstart).
 
 This skill folder includes supplementary docs:
 
@@ -145,28 +145,28 @@ curl -fsSL https://raw.githubusercontent.com/ob-labs/memory-powermem/main/instal
 
 Copy **one** skill you want into `~/.openclaw/skills/<skill-name>/` (folder name should match the skill id). The quickstart and full-guide skills are **independent**.
 
-**Quickstart (`install-powermem-memory`) — Linux / macOS:**
+**Quickstart (`install-memory-powermem`) — Linux / macOS:**
 
 ```bash
-mkdir -p ~/.openclaw/skills/install-powermem-memory
-cp /path/to/memory-powermem/skills/install-powermem-memory/SKILL.md \
-   ~/.openclaw/skills/install-powermem-memory/
+mkdir -p ~/.openclaw/skills/install-memory-powermem
+cp /path/to/memory-powermem/skills/install-memory-powermem/SKILL.md \
+   ~/.openclaw/skills/install-memory-powermem/
 ```
 
-**Full guide (`install-powermem-memory-full`) — Linux / macOS:** copy **all** `.md` files in that folder.
+**Full guide (`install-memory-powermem-full`) — Linux / macOS:** copy **all** `.md` files in that folder.
 
 ```bash
-mkdir -p ~/.openclaw/skills/install-powermem-memory-full
-cp /path/to/memory-powermem/skills/install-powermem-memory-full/*.md \
-   ~/.openclaw/skills/install-powermem-memory-full/
+mkdir -p ~/.openclaw/skills/install-memory-powermem-full
+cp /path/to/memory-powermem/skills/install-memory-powermem-full/*.md \
+   ~/.openclaw/skills/install-memory-powermem-full/
 ```
 
 **Full guide — Windows (PowerShell):**
 
 ```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.openclaw\skills\install-powermem-memory-full"
-Copy-Item "path\to\memory-powermem\skills\install-powermem-memory-full\*.md" `
-  "$env:USERPROFILE\.openclaw\skills\install-powermem-memory-full\"
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.openclaw\skills\install-memory-powermem-full"
+Copy-Item "path\to\memory-powermem\skills\install-memory-powermem-full\*.md" `
+  "$env:USERPROFILE\.openclaw\skills\install-memory-powermem-full\"
 ```
 
 ## Multi-instance OpenClaw (`--workdir` / `OPENCLAW_STATE_DIR`)
